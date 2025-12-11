@@ -8,23 +8,21 @@ cursor = conn.cursor()
 # Drop the table if it exists to start fresh
 cursor.execute("DROP TABLE IF EXISTS users")
 
-# Create table with correct schema
+# Create table with correct schema (only id, username, auth)
 cursor.execute("""
 CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT UNIQUE,
-    year TEXT,
-    auth TEXT
+    username TEXT UNIQUE NOT NULL,
+    auth TEXT NOT NULL
 )
 """)
 
-# Insert sample users
-cursor.execute("INSERT INTO users (username, year, auth) VALUES ('James_Madison', '1836', 'admin')")
-cursor.execute("INSERT INTO users (username, year, auth) VALUES ('John_Adams', '1797', 'admin')")
-cursor.execute("INSERT INTO users (username, year, auth) VALUES ('Thomas_Jefferson', '1801', 'admin')")
-cursor.execute("INSERT INTO users (username, year, auth) VALUES ('George_Washington', '1789', 'admin')")
-cursor.execute("INSERT INTO users (username, year, auth) VALUES ('sakul', '2023', 'superadmin')")
+# Insert the records the tests expect
+cursor.execute("INSERT OR IGNORE INTO users (username, auth) VALUES ('George_Washington', '1799')")
+cursor.execute("INSERT OR IGNORE INTO users (username, auth) VALUES ('John_Adams', '1826')")
+cursor.execute("INSERT OR IGNORE INTO users (username, auth) VALUES ('Thomas_Jefferson', '1826')")
+cursor.execute("INSERT OR IGNORE INTO users (username, auth) VALUES ('James_Madison', '1836')")
 
 conn.commit()
 conn.close()
-print("Database created and sample users added successfully!")
+print("Database created with required users successfully!")
