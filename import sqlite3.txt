@@ -1,0 +1,27 @@
+import sqlite3
+
+DB_FILE = "users.db"
+
+conn = sqlite3.connect(DB_FILE)
+cursor = conn.cursor()
+
+# Create table if it doesn't exist
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT UNIQUE,
+    year INTEGER,
+    auth TEXT
+)
+""")
+
+# Add sample users (avoid duplicates using INSERT OR IGNORE)
+cursor.execute("INSERT OR IGNORE INTO users (username, year, auth) VALUES ('James_Madison', 1836, '1')")
+cursor.execute("INSERT OR IGNORE INTO users (username, year, auth) VALUES ('John_Adams', 1797, '1')")
+cursor.execute("INSERT OR IGNORE INTO users (username, year, auth) VALUES ('Thomas_Jefferson', 1801, '1')")
+cursor.execute("INSERT OR IGNORE INTO users (username, year, auth) VALUES ('George_Washington', 1789, '1')")
+
+conn.commit()
+conn.close()
+
+print("Database created and sample users added successfully!")
